@@ -21,7 +21,6 @@ const inventaire = [
   },
 ];
 
-
 // ============================================
 // EXERCICE 1 : Salutation Aventurier
 // ============================================
@@ -31,13 +30,13 @@ const inventaire = [
 // ✍️ TON CODE ICI
 // Crée ta fonction salutations() ci-dessous
 
-
-
+function salutations(nom) {
+  console.log(`Bienvenue, ${nom}, dans le monde magique des potions !`);
+}
 
 // 🧪 TESTS - Décommente pour tester
 // console.log("=== EXERCICE 1 ===");
 // salutations(nom_sorcier);
-
 
 // ============================================
 // EXERCICE 2 : Quel est le tarif d'une potion ?
@@ -48,14 +47,33 @@ const inventaire = [
 // ✍️ TON CODE ICI
 // Crée ta fonction calculerPrixTotal() ci-dessous
 
+function calculerPrixTotal(idPotion, inventaire, quantite = 1) {
+  let potionTrouvee = null;
 
+  // On parcourt tout l'inventaire avec une boucle for
+  for (let i = 0; i < inventaire.length; i++) {
+    if (inventaire[i].id === idPotion) {
+      potionTrouvee = inventaire[i];
+      break; // on arrête la boucle dès qu'on a trouvé la potion
+    }
+  }
+
+  // Si la potion n'existe pas
+  if (!potionTrouvee) {
+    console.log("Potion non trouvée dans l'inventaire.");
+    return 0;
+  }
+
+  // Calcul du prix total
+  const prixTotal = potionTrouvee.prix * quantite;
+  return prixTotal;
+}
 
 
 // 🧪 TESTS - Décommente pour tester
 // console.log("=== EXERCICE 2 ===");
 // const prix = calculerPrixTotal("potion_soin", inventaire, 3);
 // console.log("Prix pour 3 potions:", prix, "🪙");
-
 
 // ============================================
 // EXERCICE 3 : Fabrication de potion
@@ -65,17 +83,15 @@ const inventaire = [
 
 // ✍️ TON CODE ICI
 // Crée ta fonction fabriquerPotion() ci-dessous
-
-
-
-
+function fabriquerPotion(id, prix=10, stock=1) {
+  return { id, prix, stock };
+}
 // 🧪 TESTS - Décommente pour tester
 // console.log("=== EXERCICE 3 ===");
 // const potion1 = fabriquerPotion("potion_mana", 15, 5);
 // console.log(potion1);
 // const potion2 = fabriquerPotion("potion_force");
 // console.log(potion2);
-
 
 // ============================================
 // EXERCICE 4 : Ajout de nouvelles potions dans l'inventaire
@@ -86,15 +102,30 @@ const inventaire = [
 // ✍️ TON CODE ICI
 // Crée ta fonction ajouterPotion() ci-dessous
 
+function ajouterPotion(inventaire, potion) {
 
+  let existe = false
 
+  for ( let i = 0; i < inventaire.length; i++) {
+    if (inventaire[i].id === potion.id) {
+      inventaire[i].prix = potion.prix;
+      inventaire[i].stock = inventaire[i].stock + potion.stock;
+      existe = true;
+      break;
+    }    
+  }
 
+  if (!existe) {
+          inventaire.push(potion);
+    }
+
+  inventaire.sort((a, b) => b.prix - a.prix);
+}
 // 🧪 TESTS - Décommente pour tester
 // console.log("=== EXERCICE 4 ===");
 // const nouvellePotion = fabriquerPotion("potion_mana", 20, 3);
 // ajouterPotion(inventaire, nouvellePotion);
 // console.log("Inventaire après ajout:", inventaire);
-
 
 // ============================================
 // EXERCICE 5 : Cherche moi les potions qui...
@@ -105,15 +136,20 @@ const inventaire = [
 // ✍️ TON CODE ICI
 // Crée tes fonctions getPotionsEnStock() et getPotionsEnRupture() ci-dessous
 
+ function getPotionsEnStock(inventaire){
+  const nouveauTableau = inventaire.filter((potion) => potion.stock > 0);
+  return nouveauTableau;
+ }
 
-
-
+ function getPotionsEnRupture(inventaire){
+  const nouveauTableau = inventaire.filter((potion) => potion.stock === 0);
+  return nouveauTableau;
+ }
 // 🧪 TESTS - Décommente pour tester
 // console.log("=== EXERCICE 5 ===");
 // console.log("Inventaire complet:", inventaire);
 // console.log("Potions en stock:", getPotionsEnStock(inventaire));
 // console.log("Potions en rupture:", getPotionsEnRupture(inventaire));
-
 
 // ============================================
 // EXERCICE 6 : Allons faire de la cueillette !
@@ -125,12 +161,27 @@ const inventaire = [
 // ✍️ TON CODE ICI
 // Crée ta fonction fabriquerPotionAvecIngredients() ci-dessous
 
+function fabriquerPotionAvecIngredients(id, ingredients, prix = 10, stock = 1) {
 
+  if (!manuel_de_fabrication[id]){
+    return new Error("Cette potion n'existe pas dans le manuel.")
+  }
 
+  const ingredientsComplets = manuel_de_fabrication[id].ingredients.every((i) => ingredients.includes(i));
+
+  if (!ingredientsComplets) {
+    return new error("Il manque des ingrédients à cette potion.")
+  }
+  return {
+    id: id,
+    prix: prix,
+    stock: stock 
+  }; 
+}
 
 // 🧪 TESTS - Décommente pour tester
 // console.log("=== EXERCICE 6 ===");
-// // Test avec tous les ingrédients
+// Test avec tous les ingrédients
 // const resultat1 = fabriquerPotionAvecIngredients(
 //   "potion_soin",
 //   ["eau_de_source", "ecaille_de_dragon", "poudre_de_diamant"],
@@ -143,7 +194,7 @@ const inventaire = [
 //   console.log("✅ Potion créée:", resultat1);
 //   ajouterPotion(inventaire, resultat1);
 // }
-//
+
 // // Test avec ingrédients manquants
 // const resultat2 = fabriquerPotionAvecIngredients(
 //   "potion_soin",
@@ -157,7 +208,6 @@ const inventaire = [
 //   console.log("✅ Potion créée:", resultat2);
 // }
 
-
 // ============================================
 // EXERCICE 7 : Une potion n'est jamais fabriquée en retard !
 // ============================================
@@ -167,8 +217,26 @@ const inventaire = [
 
 // ✍️ TON CODE ICI
 // Crée ta fonction fabriquerPotionAvecDelai() ci-dessous
+function fabriquerPotionAvecDelai(id, ingredients, callback, prix = 10, stock = 1) {
 
+  if (!manuel_de_fabrication[id]){
+    return new Error("Cette potion n'existe pas dans le manuel.")
+  }
 
+  const ingredientsComplets = manuel_de_fabrication[id].ingredients.every((i) => ingredients.includes(i));
+
+  if (!ingredientsComplets) {
+    return new error("Il manque des ingrédients à cette potion.")
+  }
+
+  const tempsFabrication = manuel_de_fabrication[id].temps_de_fabrication;
+
+  setTimeout(() => {
+    // Code à exécuter après le délai
+    const potion = { id, prix, ingredients, stock };
+    callback(potion); // On appelle le callback avec la potion
+  }, tempsFabrication * 1000); // Conversion en millisecondes
+}
 
 
 // 🧪 TESTS - Décommente pour tester
@@ -177,7 +245,7 @@ const inventaire = [
 //   console.log("✅ Fabrication terminée:", potion);
 //   ajouterPotion(inventaire, potion);
 // }
-//
+
 // const erreur = fabriquerPotionAvecDelai(
 //   "potion_soin",
 //   ["eau_de_source", "ecaille_de_dragon", "poudre_de_diamant"],
@@ -185,13 +253,12 @@ const inventaire = [
 //   15,
 //   2
 // );
-//
+
 // if (erreur instanceof Error) {
 //   console.error(erreur.message);
 // } else {
 //   console.log("⏳ Fabrication en cours...");
 // }
-
 
 // ============================================
 // EXERCICE 8 : Inventaires indépendants avec les Closures
@@ -201,9 +268,39 @@ const inventaire = [
 
 // ✍️ TON CODE ICI
 // Crée ta fonction creerInventaire() ci-dessous
+function creerInventaire() {
+  const inventaire = [];
 
+  return {
+    ajouterPotion(potion) {
+      // On reprend la logique de l'exercice 4
+      let existe = false;
 
+      for (let i = 0; i < inventaire.length; i++) {
+        if (inventaire[i].id === potion.id) {
+          inventaire[i].prix = potion.prix;
+          inventaire[i].stock += potion.stock;
+          existe = true;
+          break;
+        }
+      }
 
+      if (!existe) {
+        inventaire.push(potion);
+      }
+
+      inventaire.sort((a, b) => b.prix - a.prix);
+    },
+
+    getPotionsEnStock() {
+      return inventaire.filter(potion => potion.stock > 0);
+    },
+
+    getPotionsEnRupture() {
+      return inventaire.filter(potion => potion.stock === 0);
+    }
+  };
+}
 
 // 🧪 TESTS - Décommente pour tester
 // console.log("=== EXERCICE 8 ===");
@@ -216,7 +313,6 @@ const inventaire = [
 // console.log("Boutique A - Potions en stock:", boutiqueA.getPotionsEnStock());
 // console.log("Boutique B - Potions en rupture:", boutiqueB.getPotionsEnRupture());
 
-
 // ============================================
 // EXERCICE 9 : Bonus - Un sorcier a toujours la classe !
 // ============================================
@@ -225,9 +321,6 @@ const inventaire = [
 
 // ✍️ TON CODE ICI
 // Crée ta classe Inventaire ci-dessous
-
-
-
 
 // 🧪 TESTS - Décommente pour tester
 // console.log("=== EXERCICE 9 ===");

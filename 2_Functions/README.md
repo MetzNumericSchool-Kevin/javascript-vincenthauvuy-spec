@@ -144,7 +144,7 @@ salutations(nom_sorcier);
    - Trouver la potion dans l'inventaire grâce à son `id`
    - Calculer le prix total : `prix de la potion × quantité`
    - Retourner ce prix total
-3. Teste ta fonction en affichant le prix pour 3 potions de soin
+3. Teste ta fonction en affichant le prix  pour 3 potions de soin
 
 💡 **Astuce** : Utilise une boucle `for` pour parcourir l'inventaire et trouver la potion avec le bon `id`.
 
